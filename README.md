@@ -1,6 +1,6 @@
 # MPMS 汇总数据 → Origin
 
-[English](README.en.md) · MIT · v0.1.0
+[English](README.en.md) · MIT · v0.1.1
 
 面向 **ChatGPT Work 云端**的开源技能：把用户上传的 Quantum Design MPMS **汇总 DAT** 整理为 XLSX、逐曲线 CSV、源行映射、manifest、PNG 预览和 Origin OGS 导入制图脚本。先发现实际表头与单位，再按用户确认的磁矩列、X、质量和段界转换。
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "mpms-summary-to-origin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "files": [
     "SKILL.md",
     "references/en/format-and-decisions.md",

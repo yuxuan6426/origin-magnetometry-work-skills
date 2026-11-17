@@ -1,6 +1,6 @@
 # Verification / 验证
 
-Package version: **0.1.0**. Validation date: **2026-11-18**.
+Package version: **0.1.1**. Validation date: **2026-11-18**.
 
 | Layer / 层级 | Status / 状态 | Evidence and limits / 证据与边界 |
 | --- | --- | --- |

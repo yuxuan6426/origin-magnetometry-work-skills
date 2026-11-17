@@ -1,6 +1,6 @@
 # MPMS summary data → Origin
 
-[中文](README.md) · MIT · v0.1.0
+[中文](README.md) · MIT · v0.1.1
 
 An open-source skill for **ChatGPT Work cloud execution**. It turns uploaded Quantum Design MPMS **summary DAT** tables into XLSX, per-curve CSV, source-row mappings, a manifest, a PNG preview and an Origin OGS import/plot handoff. It discovers actual headers and units before applying the user's chosen moment column, X, mass and segment ranges.
 

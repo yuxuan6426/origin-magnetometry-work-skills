@@ -1,6 +1,6 @@
 # Public sources / 公开来源
 
-Independently authored from the sources below, accessed **2026-11-18**. The repository includes no instrument measurements, sample fixtures, vendor documents or copied column tables. Version 0.1.0 is this package's version, not a Quantum Design or Origin version.
+Independently authored from the sources below, accessed **2026-11-18**. The repository includes no instrument measurements, sample fixtures, vendor documents or copied column tables. Version 0.1.1 is this package's version, not a Quantum Design or Origin version.
 
 本仓库仅据下列公开资料独立编写，未分发仪器测量数据、样本测试答案或厂商原文。访问日期为 **2026-11-18**。
 
