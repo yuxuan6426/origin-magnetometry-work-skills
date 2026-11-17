@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "name": "mpms-summary-to-origin",
+  "version": "0.1.0",
+  "files": [
+    "SKILL.md",
+    "references/en/format-and-decisions.md",
+    "references/en/workflow.md",
+    "references/receiver-checklist.md",
+    "references/sources.md",
+    "references/verification.md",
+    "references/zh-CN/format-and-decisions.md",
+    "references/zh-CN/workflow.md",
+    "requirements.txt",
+    "scripts/mpms.py",
+    "scripts/mpms_core.py",
+    "scripts/mpms_export.py"
+  ],
+  "requirements": [
+    {
+      "id": "bundle-1",
+      "kind": "bundle",
+      "handling": "SKILL.md"
+    },
+    {
+      "id": "bundle-2",
+      "kind": "bundle",
+      "handling": "scripts/mpms.py"
+    },
+    {
+      "id": "bundle-3",
+      "kind": "bundle",
+      "handling": "scripts/mpms_core.py"
+    },
+    {
+      "id": "bundle-4",
+      "kind": "bundle",
+      "handling": "scripts/mpms_export.py"
+    },
+    {
+      "id": "bundle-5",
+      "kind": "bundle",
+      "handling": "requirements.txt"
+    },
+    {
+      "id": "bundle-6",
+      "kind": "bundle",
+      "handling": "references/"
+    },
+    {
+      "id": "rebuild-1",
+      "kind": "rebuild",
+      "handling": "Python >=3.10 for source execution; no build step"
+    },
+    {
+      "id": "rebuild-2",
+      "kind": "rebuild",
+      "handling": "For conversion: openpyxl >=3.1,<4 and matplotlib >=3.8,<4; see bundled requirements.txt"
+    },
+    {
+      "id": "host-1",
+      "kind": "host",
+      "handling": "ChatGPT Work with file access and Python execution; receiver import/activation pending"
+    },
+    {
+      "id": "host-2",
+      "kind": "host",
+      "handling": "Origin with CSV Data Connector for the separate local OGS handoff; execution pending"
+    },
+    {
+      "id": "configure-1",
+      "kind": "configure",
+      "handling": "Discover uploaded-file, skill and output paths in the receiving environment"
+    },
+    {
+      "id": "configure-2",
+      "kind": "configure",
+      "handling": "Choose a new output directory"
+    },
+    {
+      "id": "configure-3",
+      "kind": "configure",
+      "handling": "For OGS pass the local extracted Windows directory including trailing backslash"
+    },
+    {
+      "id": "input-1",
+      "kind": "input",
+      "handling": "Authorized Quantum Design summary DAT with one [Data] table"
+    },
+    {
+      "id": "input-2",
+      "kind": "input",
+      "handling": "Explicit moment column and intended X"
+    },
+    {
+      "id": "input-3",
+      "kind": "input",
+      "handling": "User-supplied positive finite sample mass in mg OR explicit raw choice"
+    },
+    {
+      "id": "input-4",
+      "kind": "input",
+      "handling": "Optional confirmed inclusive record ranges covering all nonblank records once"
+    },
+    {
+      "id": "input-5",
+      "kind": "input",
+      "handling": "Verified unit override only when needed"
+    },
+    {
+      "id": "unsupported-1",
+      "kind": "unsupported",
+      "handling": "Raw voltage scans including .rw.dat and renamed position/voltage scans"
+    },
+    {
+      "id": "unsupported-2",
+      "kind": "unsupported",
+      "handling": "Automatic experimental-label assignment, fitting, background subtraction or universal quality rejection"
+    },
+    {
+      "id": "unsupported-3",
+      "kind": "unsupported",
+      "handling": "Local Origin MCP/COM/desktop control or native .opju generation"
+    }
+  ],
+  "validation": {
+    "static": "passed: portable-skill-creator structure verify and 13 local package/extraction checks on 2026-11-18",
+    "synthetic": "47 independent local checks passed on 2026-11-18",
+    "work_receiver": "pending",
+    "origin_execution": "pending",
+    "real_measurements": "pending",
+    "tested_runtime": {
+      "python": "3.13.9",
+      "openpyxl": "3.1.5",
+      "matplotlib": "3.10.9"
+    }
+  }
+}

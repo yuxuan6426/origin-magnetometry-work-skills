@@ -1,0 +1,8 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "origin-magnetometry-work-skills",
+  "version": "0.1.0",
+  "description": "Inspect Quantum Design MPMS summary DAT uploads and prepare traceable XLSX, CSV, previews, and Origin script handoffs in ChatGPT Work.",
+  "license": "MIT",
+  "keywords": ["magnetometry", "mpms", "quantum-design", "origin", "chatgpt-work"]
+}

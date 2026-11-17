@@ -1,0 +1,3 @@
+# Inspection uses the Python standard library only.
+# Conversion imports these packages in the execution environment, not on the user's Origin machine.
+-r skills/mpms-summary-to-origin/requirements.txt
