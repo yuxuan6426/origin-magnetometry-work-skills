@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "mpms-summary-to-origin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "files": [
     "SKILL.md",
     "references/en/format-and-decisions.md",
@@ -100,7 +100,7 @@
     {
       "id": "input-4",
       "kind": "input",
-      "handling": "Optional confirmed inclusive record ranges covering all nonblank records once"
+      "handling": "Optional confirmed inclusive ranges for a target subset or a full-file split"
     },
     {
       "id": "input-5",
@@ -124,11 +124,11 @@
     }
   ],
   "validation": {
-    "static": "passed: portable-skill-creator structure verify and 13 local package/extraction checks on 2026-11-18",
-    "synthetic": "47 independent local checks passed on 2026-11-18",
+    "static": "passed: skill structure and source package checks on 2026-11-21",
+    "synthetic": "passed: v0.1.2 range selection and compatibility checks on 2026-11-21; see verification.md",
     "work_receiver": "pending",
-    "origin_execution": "pending",
-    "real_measurements": "pending",
+    "origin_execution": "passed: Origin 2026 on Windows, two targets with save/reopen readback on 2026-11-21",
+    "real_measurements": "passed: two target exports from mixed-mode summary DAT on 2026-11-21",
     "tested_runtime": {
       "python": "3.13.9",
       "openpyxl": "3.1.5",

@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 
 class DataError(ValueError):
@@ -254,6 +254,18 @@ def segments_from_config(config: Any, count: int) -> list[dict[str, Any]]:
         expected = end + 1
     if expected != count + 1:
         raise DataError("Segments must cover every nonblank data record (including invalid measurements).")
+    return segments
+
+
+def target_segments(ranges: list[list[int]], count: int) -> list[dict[str, Any]]:
+    segments = []
+    previous_end = 0
+    for i, (start, end) in enumerate(ranges, 1):
+        if not previous_end < start <= end <= count:
+            raise DataError(f"Target ranges must be within records 1..{count}, ordered and non-overlapping.")
+        segments.append({"id": f"curve_{i:03d}", "start": start, "end": end,
+                         "label": "", "origin": "explicit_target_range"})
+        previous_end = end
     return segments
 
 

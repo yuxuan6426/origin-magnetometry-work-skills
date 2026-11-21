@@ -18,6 +18,8 @@
 
 ## 曲线与顺序
 
+目标范围模式下，`record_count` 统计全源，`curve_record_count` 统计选定范围（包括其中的缺失值），`outside_target_record_count` 统计范围外记录。范围外记录在 `source_rows.csv` 中标记为 `outside_target_ranges`，曲线 ID 和行号留空。所有曲线产物使用 manifest 中同一组 `segments`。
+
 默认单段是一种整理方式，不宣称只存在一个物理实验。可用两端包含的源记录范围显式覆盖。每个非空源记录恰好出现一次，包括 X 或磁矩无效的记录。逐曲线 CSV 和 XLSX 保留采集顺序；`XY_Wide` 为每条曲线提供独立的 X/Y 对，较短曲线只在末尾补空。重复 X、反向扫描和重复设定点均保持。不进行重采样、插值、排序或合并。
 
 记录编号从列标题后开始。`source_line_start`、`source_line_end` 是原始解码文件从 1 开始的物理行；跨行引号注释可使一条记录覆盖多行。`curve_row` 从第一行数值开始计数；`curve_csv_row` 包含 CSV 的一行标题。`raw_cells_json` 保存补齐前的解码字段。源 SHA-256 将映射绑定至上传文件的确切字节。

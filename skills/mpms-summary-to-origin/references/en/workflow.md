@@ -36,7 +36,9 @@ Replace each placeholder with the inspected selection and the user's mass:
 python skills/mpms-summary-to-origin/scripts/mpms.py convert /path/to/upload.dat --output /path/to/new-output --moment-column 'ACTUAL HEADER' --x temperature --mass-mg USER_MASS_MG --segments /path/to/confirmed-segments.json
 ```
 
-For raw moment values, replace `--mass-mg USER_MASS_MG` with `--raw`. Omit `--segments` for a confirmed single curve. For an explicit horizontal column, replace `--x temperature` with `--x-column 'ACTUAL X HEADER'`. The output directory must be new. Exit status is 0 for success and 2 for expected input/configuration errors. The script never overwrites an existing bundle.
+For a subset, replace `--segments ...` with `--target-range START END`, using inclusive source record numbers. Repeat it for ordered, non-overlapping ranges. Every curve artifact contains the selected ranges and both source tables preserve all records. Each target curve needs at least one finite X/Y pair and retains its missing measurements.
+
+For raw moment values, replace `--mass-mg USER_MASS_MG` with `--raw`. Omit both range options for a single whole-file curve. For an explicit horizontal column, replace `--x temperature` with `--x-column 'ACTUAL X HEADER'`. The output directory must be new. Exit status is 0 for success and 2 for expected input/configuration errors. The script never overwrites an existing bundle.
 
 Outputs:
 
@@ -62,4 +64,4 @@ run.section("C:\data\import_origin.ogs", Main, "C:\data\");
 
 The one argument is the extracted directory **including its trailing backslash**. The script creates a workbook and line graph for each curve with Origin's CSV Data Connector. It reads columns 1 and 2 for X/Y; later CSV columns provide provenance. Check headers, numeric import, missing-value line behavior and axes against the manifest and preview in the recipient's Origin version. Save the Origin project manually if desired. There is no live desktop automation or `.opju` generation here.
 
-Import/activation in ChatGPT Work and native Origin execution are **pending**. Source execution does not mean a plugin has been installed.
+See the [verification record](../verification.md) for Work receiver and native Origin results.

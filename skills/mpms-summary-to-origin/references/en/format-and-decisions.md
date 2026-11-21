@@ -18,6 +18,8 @@ Only user-provided sample mass is used. Raw keeps the selected moment numericall
 
 ## Curves and ordering
 
+In target-range mode, `record_count` counts all source records, `curve_record_count` counts selected records including missing measurements, and `outside_target_record_count` counts records outside the selection. Those rows have status `outside_target_ranges` and empty curve fields in `source_rows.csv`. All curve artifacts use the ranges found in manifest `segments`.
+
 The default single segment is an organizational choice, not a claim of one physical experiment. Explicit inclusive record ranges may override it. Every nonblank source record appears once, even if X or magnetic moment is invalid. Per-curve CSVs and XLSX worksheets keep acquisition order; `XY_Wide` has a separate X/Y pair for each curve and pads shorter curves at their ends. Equal X values, reversals and repeated setpoints remain intact. No resampling, interpolation, sorting or merging is performed.
 
 Records are numbered after the column header. `source_line_start` and `source_line_end` refer to 1-based physical lines in the original decoded file. For multiline quoted comments, one record spans several physical lines. `curve_row` is 1-based numeric-row numbering; `curve_csv_row` includes the CSV header. `raw_cells_json` stores original decoded tokens before padding. The source SHA-256 binds mappings to the exact uploaded bytes.

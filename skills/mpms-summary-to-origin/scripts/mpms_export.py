@@ -83,7 +83,7 @@ def write_xlsx(path: Path, data: Dataset, curves, xcol: Column, moment: Column, 
     wb.save(path)
 
 
-def write_csvs(directory: Path, curves):
+def write_csvs(directory: Path, data: Dataset, curves):
     for curve in curves:
         with (directory / (curve["id"] + ".csv")).open("w", newline="", encoding="utf-8") as handle:
             writer = csv.writer(handle)
@@ -95,12 +95,19 @@ def write_csvs(directory: Path, curves):
         writer = csv.writer(handle)
         writer.writerow(["source_record", "source_line_start", "source_line_end", "original_field_count",
                          "curve_id", "curve_row", "curve_csv_row", "status", "raw_cells_json"])
-        for curve in curves:
-            for i, p in enumerate(curve["points"], 1):
-                r = p["record"]
-                # JSON arrays begin with '['; uploaded cells are never interpolated as CSV formulas.
-                writer.writerow([r.number, r.line_start, r.line_end, r.width, curve["id"], i, i + 1,
-                                 p["status"], json.dumps(r.cells[:r.width], ensure_ascii=False)])
+        selected = iter((p["record"].number, curve["id"], i, p["status"])
+                        for curve in curves for i, p in enumerate(curve["points"], 1))
+        point = next(selected, None)
+        for r in data.records:
+            if point and point[0] == r.number:
+                _, curve_id, i, status = point
+                location = [curve_id, i, i + 1, status]
+                point = next(selected, None)
+            else:
+                location = [None, None, None, "outside_target_ranges"]
+            # JSON arrays begin with '['; uploaded cells are never interpolated as CSV formulas.
+            writer.writerow([r.number, r.line_start, r.line_end, r.width, *location,
+                             json.dumps(r.cells[:r.width], ensure_ascii=False)])
 
 
 def axis_caption(col: Column) -> str:
@@ -167,7 +174,7 @@ def export_bundle(destination: Path, data: Dataset, curves, xcol: Column, moment
     with tempfile.TemporaryDirectory(prefix="mpms-export-", dir=destination.parent) as temporary:
         staging = Path(temporary) / "bundle"
         staging.mkdir()
-        write_csvs(staging, curves)
+        write_csvs(staging, data, curves)
         write_xlsx(staging / "magnetometry.xlsx", data, curves, xcol, moment, yunit, scaling)
         try:
             write_preview(staging / "preview.png", curves, xcol, yunit)
@@ -180,8 +187,8 @@ def export_bundle(destination: Path, data: Dataset, curves, xcol: Column, moment
             "源文件哈希、实际表头、单位、归一化及段界见 manifest.json。\n"
             "All curves retain their own X and acquisition order. Blank numeric cells denote unavailable values.\n"
             "每条曲线独立保留 X 与采集顺序；空数值单元格表示缺失或非有限值。\n"
-            "source_rows.csv maps every nonblank source record to its curve row and physical source lines.\n"
-            "source_rows.csv 覆盖所有非空源记录；包含原始字段 JSON 与物理源行。\n"
+            "source_rows.csv lists all nonblank records. Rows outside target ranges have no curve assignment.\n"
+            "source_rows.csv 保留全部非空源记录。目标范围外的记录仅保留来源追溯。\n"
             "No experimental labels, fits, background subtraction or quality filtering were inferred.\n"
             "实验标签由用户给出；本程序仅整理数据。\n"
             "Origin: download/extract all files, then run the Main section with the local directory argument.\n"
@@ -193,10 +200,13 @@ def export_bundle(destination: Path, data: Dataset, curves, xcol: Column, moment
         files = [{"path": p.name, "size_bytes": p.stat().st_size,
                   "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
                  for p in sorted(staging.iterdir()) if p.is_file()]
+        curve_record_count = sum(len(c["points"]) for c in curves)
         manifest = {
             "schema_version": "1.0", "tool": "mpms-summary-to-origin", "tool_version": VERSION,
             "created_utc": datetime.now(timezone.utc).isoformat(),
             "source": source_info(data), "record_count": len(data.records),
+            "curve_record_count": curve_record_count,
+            "outside_target_record_count": len(data.records) - curve_record_count,
             "columns": [column_dict(c, data.records) for c in data.columns],
             "selection": {"x": column_dict(xcol, data.records), "moment": column_dict(moment, data.records)},
             "scaling": scaling, "invocation": invocation,
@@ -208,6 +218,7 @@ def export_bundle(destination: Path, data: Dataset, curves, xcol: Column, moment
             "mapping": {"record_numbering": "1-based nonblank CSV records after the column header",
                         "line_numbering": "1-based physical lines in original decoded source",
                         "csv_curve_header_lines": 1, "invalid_records": "retained with blank unavailable numeric cells",
+                        "outside_target_ranges": "retained in source_rows.csv and Source_Rows with no curve assignment",
                         "blank_source_lines": "excluded from record numbering; ranges recorded in source",
                         "raw_cells_json": "original decoded tokens, before padding short rows",
                         "xlsx_text": "literal strings; formula interpretation disabled"},

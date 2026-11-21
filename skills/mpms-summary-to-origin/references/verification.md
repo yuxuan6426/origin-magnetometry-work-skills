@@ -1,6 +1,17 @@
 # Verification / 验证
 
-Package version: **0.1.1**. Validation date: **2026-11-18**.
+## v0.1.2
+
+The target-range CLI exports a shared curve selection to XLSX, CSV, manifest, PNG and OGS. Both source tables retain all nonblank source records.
+
+| Check (2026-11-21) | Result |
+| --- | --- |
+| Local mixed-mode DAT | Two target exports matched independent calculations and retained all source records |
+| Range behavior | Multiple disjoint ranges, unavailable measurements and whole-file export passed. Invalid, overlapping and empty targets were rejected |
+| Native Origin | Origin 2026 imported both generated scripts and preserved every target value after saving and reopening the projects |
+| ChatGPT Work repository link and file upload | Pending receiver execution |
+
+## v0.1.1 baseline, 2026-11-18
 
 | Layer / 层级 | Status / 状态 | Evidence and limits / 证据与边界 |
 | --- | --- | --- |

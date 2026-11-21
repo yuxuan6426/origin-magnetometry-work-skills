@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from mpms_core import (DataError, VERSION, build_curves, inspect_dataset, load_dat,
-                       segments_from_config, select_column)
+                       segments_from_config, select_column, target_segments)
 
 
 def parser() -> argparse.ArgumentParser:
@@ -31,7 +31,10 @@ def parser() -> argparse.ArgumentParser:
     mass.add_argument("--mass-mg", type=float, help="Positive sample mass in mg explicitly supplied by the user")
     mass.add_argument("--raw", action="store_true", help="Keep unnormalized moment values and source moment unit")
     convert.add_argument("--moment-unit", choices=("emu", "A*m^2"), help="Explicit verified source unit override")
-    convert.add_argument("--segments", type=Path, help="JSON record ranges covering all records once; default one segment")
+    ranges = convert.add_mutually_exclusive_group()
+    ranges.add_argument("--segments", type=Path, help="JSON record ranges covering all records once; default one segment")
+    ranges.add_argument("--target-range", type=int, nargs=2, metavar=("START", "END"), action="append",
+                        help="Export an inclusive source-record range; repeat in source order for other curves")
     return root
 
 
@@ -55,16 +58,23 @@ def run(argv=None) -> int:
         xcol = select_column(data, args.x_column, args.x)
         if xcol.index == moment.index:
             raise DataError("X and moment must be different columns.")
-        config = json.loads(args.segments.read_text(encoding="utf-8-sig")) if args.segments else None
-        segments = segments_from_config(config, len(data.records))
+        if args.target_range:
+            segments = target_segments(args.target_range, len(data.records))
+            segment_mode = "explicit target ranges"
+        else:
+            config = json.loads(args.segments.read_text(encoding="utf-8-sig")) if args.segments else None
+            segments = segments_from_config(config, len(data.records))
+            segment_mode = "explicit JSON ranges" if args.segments else "default single segment"
         curves, yunit, scaling = build_curves(data, xcol, moment, segments, args.mass_mg, args.moment_unit)
         from mpms_export import export_bundle
         invocation = {"moment_column": args.moment_column, "x": args.x, "x_column": args.x_column,
                       "mass_mg": args.mass_mg, "raw": args.raw, "moment_unit": args.moment_unit,
-                      "segments": "explicit JSON ranges" if args.segments else "default single segment"}
+                      "segments": segment_mode}
+        if args.target_range:
+            invocation["target_ranges"] = args.target_range
         result = export_bundle(args.output, data, curves, xcol, moment, yunit, scaling, invocation)
         print(json.dumps({"output": str(args.output), "curves": len(curves),
-                          "records": len(data.records), "unit": yunit,
+                          "records": len(data.records), "curve_records": result["curve_record_count"], "unit": yunit,
                           "work_receiver": result["verification"]["chatgpt_work_receiver"],
                           "origin_execution": result["verification"]["origin_execution"]}, ensure_ascii=False))
         return 0

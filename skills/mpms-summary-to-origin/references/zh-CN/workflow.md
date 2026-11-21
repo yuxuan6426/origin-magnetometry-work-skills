@@ -22,6 +22,8 @@ python skills/mpms-summary-to-origin/scripts/mpms.py inspect /path/to/upload.dat
 
 ## 段界覆盖
 
+如果只需要指定范围，用 `--target-range START END`（两端包含的源记录号）。多条曲线可重复传入，范围须按源顺序排列且互不重叠。它与 `--segments` 二选一。选定记录进入所有曲线产物，范围外记录仍在 `Source_Rows` 和 `source_rows.csv` 中。范围内缺失值保留，每条目标曲线需要至少一组有效 X/Y。
+
 默认一段覆盖全部非空数据记录。需要覆盖时，将检查 JSON 中的 `segment_template` 复制到临时 JSON。顶层仅含 `segments` 数组，每段有整数 `start`、整数 `end` 和可选字符串 `label`。根据用户确认的测量流程拆分，必须按源顺序、连续、无重叠地完整覆盖记录 1 到 N；两端均包含。缺失或非有限测量记录也计入范围。空段、跳过记录、重复记录和重排都会报错。
 
 标签来自用户；不凭温度走向、名义磁场、文件名或曲线形状推断 ZFC、FC、升降温、磁滞支路等实验身份。程序不使用任意容差聚类或普遍适用的拟合质量阈值。
@@ -58,4 +60,4 @@ run.section("C:\data\import_origin.ogs", Main, "C:\data\");
 
 唯一参数是解压目录，**包含末尾反斜杠**。脚本使用 Origin 的 CSV Data Connector，为每条曲线创建工作簿和折线图，取前两列作为 X/Y，后续列用于追溯。收件人在自己的 Origin 版本中核对表头、数字导入、缺失点连线行为、坐标轴及 manifest/预览；需要时自行保存 Origin 项目。本技能无桌面连接或 `.opju` 生成。
 
-ChatGPT Work 接收端导入/启用与 Origin 本机运行均为 **pending**；运行源码不代表插件已安装。
+接收端测试与 Origin 本机验证结果见[验证记录](../verification.md)。

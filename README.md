@@ -1,10 +1,10 @@
 # MPMS 汇总数据 → Origin
 
-[English](README.en.md) · MIT · v0.1.1
+[English](README.en.md) · MIT · v0.1.2
 
 面向 **ChatGPT Work 云端**的开源技能：把用户上传的 Quantum Design MPMS **汇总 DAT** 整理为 XLSX、逐曲线 CSV、源行映射、manifest、PNG 预览和 Origin OGS 导入制图脚本。先发现实际表头与单位，再按用户确认的磁矩列、X、质量和段界转换。
 
-**验证状态：本机独立合成检查 47 项通过；ChatGPT Work 接收端导入/启用 pending；Origin 本机执行 pending。** 这是可审阅的源码包，尚未宣称在接收端安装。见[验证记录](skills/mpms-summary-to-origin/references/verification.md)。
+**v0.1.2 支持指定目标范围，同时保留全源追溯。** 各环境的实测结果见[验证记录](skills/mpms-summary-to-origin/references/verification.md)。
 
 ![可维护的工作流架构图](docs/architecture.svg)
 
@@ -42,6 +42,8 @@ python skills/mpms-summary-to-origin/scripts/mpms.py convert /path/to/upload.dat
 ```
 
 未归一化模式用 `--raw` 替换 `--mass-mg USER_MASS_MG`。磁场横轴使用 `--x field`，显式横轴使用 `--x-column`。段界覆盖使用 `--segments /path/to/confirmed-segments.json`；从检查结果的 `segment_template` 开始编辑，完整覆盖所有源记录。输出目录必须新建。只提取技能目录时，在该目录运行 `python scripts/mpms.py ...` 并使用该目录内的依赖文件。
+
+仅交付目标曲线时使用 `--target-range START END`。范围使用两端包含的源记录号，可按源顺序重复指定。范围外记录保留在 Excel 源表和源行映射中。
 
 详见[中文操作指南](skills/mpms-summary-to-origin/references/zh-CN/workflow.md)与[格式和科学决策](skills/mpms-summary-to-origin/references/zh-CN/format-and-decisions.md)。
 

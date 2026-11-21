@@ -1,10 +1,10 @@
 # MPMS summary data → Origin
 
-[中文](README.md) · MIT · v0.1.1
+[中文](README.md) · MIT · v0.1.2
 
 An open-source skill for **ChatGPT Work cloud execution**. It turns uploaded Quantum Design MPMS **summary DAT** tables into XLSX, per-curve CSV, source-row mappings, a manifest, a PNG preview and an Origin OGS import/plot handoff. It discovers actual headers and units before applying the user's chosen moment column, X, mass and segment ranges.
 
-**Validation: 47 local independent synthetic checks passed; ChatGPT Work receiver import/activation pending; Origin native execution pending.** This is a reviewable source package, without an installation claim. See [verification](skills/mpms-summary-to-origin/references/verification.md).
+**v0.1.2 exports selected ranges with full-source traceability.** See the [verification record](skills/mpms-summary-to-origin/references/verification.md) for tested environments.
 
 ![Maintainable workflow architecture](docs/architecture.svg)
 
@@ -42,6 +42,8 @@ python skills/mpms-summary-to-origin/scripts/mpms.py convert /path/to/upload.dat
 ```
 
 Replace the mass option with `--raw` for unnormalized moment. Use `--x field` for field, or `--x-column` for an explicit X header/index. Override ranges with `--segments /path/to/confirmed-segments.json`, starting from the inspection's `segment_template` and preserving full source-record coverage. Output must be a new directory. With only the skill folder extracted, run `python scripts/mpms.py ...` from that folder and use its own requirements file.
+
+For target curves, use `--target-range START END` with inclusive source record numbers. Repeat it in source order for multiple curves. Rows outside those ranges remain in the workbook's source sheet and the source mapping CSV.
 
 Read the [English workflow](skills/mpms-summary-to-origin/references/en/workflow.md) and [format/scientific decisions](skills/mpms-summary-to-origin/references/en/format-and-decisions.md) for details.
 
